@@ -1142,7 +1142,7 @@ function saveIdentity(){
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getAuth, GoogleAuthProvider, signInWithPopup, signOut as fbSignOut, onAuthStateChanged }
+import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithRedirect, getRedirectResult, signOut as fbSignOut, onAuthStateChanged }
   from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 import { getFirestore, collection, getDocs, addDoc, deleteDoc, doc, orderBy, query, serverTimestamp }
   from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
@@ -1164,6 +1164,7 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 
 const provider = new GoogleAuthProvider();
+  getRedirectResult(auth).catch(e => console.log(e));
 
 // AUTH
 onAuthStateChanged(auth, (user) => {
@@ -1183,7 +1184,7 @@ onAuthStateChanged(auth, (user) => {
 });
 
 window.signInGoogle = async () => {
-  try { await signInWithPopup(auth, provider); closeLoginModal(); }
+  try { await signInWithRedirect(auth, provider); }
   catch(e) { alert('Login failed: ' + e.message); }
 };
 window.doSignOut = () => fbSignOut(auth);
